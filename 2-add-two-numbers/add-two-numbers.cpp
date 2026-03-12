@@ -11,31 +11,96 @@
 class Solution {
 public:
     ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
-    ListNode *t1=l1;
-    ListNode *t2=l2;
-    ListNode *dummy=new ListNode(-1);
-    ListNode *curr=dummy;
-    int carry=0;
-    while(t1!=NULL || t2!=NULL){
-        int sum=carry;
-        if(t1)
-        sum=sum+t1->val;
-        if(t2)
-        sum=sum+t2->val;
-        ListNode *newNode=new ListNode(sum%10);
-        carry=sum/10;
-        curr->next=newNode;
-        curr=curr->next;
-        if(t1)
-        t1=t1->next;
-        if(t2)
-        t2=t2->next;
+      int l1_length = 0; 
+        int l2_length = 0; 
+        ListNode* current = l1; 
+
+        // get l1 length 
+        while (current != nullptr) {
+            l1_length++; 
+            current = current->next; 
+        }
+
+        // get l2 length 
+        current = l2; 
+        while (current != nullptr) {
+            l2_length++; 
+            current = current->next;
+        }
+
+        int next_digit = 0; 
+        int temp_curr = 0;
+        int temp_next = 0; 
+        // add l2 to l1 if l1 is longer
+        if (l2_length <= l1_length) {
+            current = l1; 
+            while (l2->next != nullptr) {
+                temp_curr = current->val;
+                temp_next = next_digit; 
+                current->val = (l2->val + temp_curr + temp_next) % 10; 
+                next_digit = (l2->val + temp_curr + temp_next) / 10;
+                l2 = l2->next;
+                current = current->next;
+            }
+            temp_curr = current->val;
+            temp_next = next_digit; 
+            current->val = (l2->val + temp_curr + temp_next) % 10; 
+            next_digit = (l2->val + temp_curr + temp_next) / 10;
+
+            if (l2_length < l1_length) {
+                current = current->next;
+                while (current->next != nullptr) {
+                    temp_curr = current->val;
+                    temp_next = next_digit; 
+                    current->val = (temp_curr + temp_next) % 10; 
+                    next_digit = (temp_curr + temp_next) / 10;
+                    current = current->next;
+                }
+                temp_curr = current->val;
+                temp_next = next_digit;
+                current->val = (temp_curr + temp_next) % 10; 
+                next_digit = (temp_curr + temp_next) / 10;
+            }
+
+            // only need to add one more node if next_digit > 0
+            if (next_digit > 0) {
+                current->next = new ListNode(next_digit);
+            }
+            return l1; 
+            
+        } else { // add l1 to l2 
+            current = l2; 
+            while (l1->next != nullptr) {
+                temp_curr = current->val;
+                temp_next = next_digit;
+                current->val = (l1->val + temp_curr + temp_next) % 10; 
+                next_digit = (l1->val + temp_curr + temp_next) / 10;
+                l1 = l1->next;
+                current = current->next;
+            }
+            temp_curr = current->val;
+            temp_next = next_digit;
+            current->val = (l1->val + temp_curr + temp_next) % 10; 
+            next_digit = (l1->val + temp_curr + temp_next) / 10;
+
+            current = current->next;
+            while (current->next != nullptr) {
+                temp_curr = current->val;
+                temp_next = next_digit;
+                current->val = (temp_curr + temp_next) % 10; 
+                next_digit = (temp_curr + temp_next) / 10; 
+                current = current->next;
+            }
+            temp_curr = current->val;
+            temp_next = next_digit;
+            current->val = (temp_curr + temp_next) % 10; 
+            next_digit = (temp_curr + temp_next) / 10; 
+
+            // only need to add one more node if next_digit > 0
+            if (next_digit > 0) {
+                current->next = new ListNode(next_digit); 
+            }
+            return l2; 
+        }  
     }
-    if(carry){
-    ListNode *newNode=new ListNode(carry);
-    curr->next=newNode;
-    }
-    return dummy->next;
-    }    
-    
 };
