@@ -11,7 +11,7 @@
  */
 class Solution {
 public:
- vector<int>ans;
+vector<int>ans;
 void level1(TreeNode* node,int level){
    
     if(node==NULL)return;
@@ -21,7 +21,7 @@ void level1(TreeNode* node,int level){
     level1(node->left,level+1);
     }
     vector<int> rightSideView(TreeNode* root) {
-     level1(root,0);
-     return ans;   
+        level1(root,0);
+     return ans;  
     }
 };
