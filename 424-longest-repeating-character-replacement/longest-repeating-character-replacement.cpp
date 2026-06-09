@@ -1,42 +1,36 @@
 class Solution {
 public:
     int characterReplacement(string s, int k) {
-     // Frequency array for A-Z
-        vector<int> freq(26, 0);
-        
-        // Left and right pointers of sliding window
-        int left = 0, right = 0;
-
-        // Tracks the count of the most frequent character in current window
-        int maxCount = 0;
-
-        // Stores the maximum length of valid window
-        int maxLength = 0;
-
-        // Iterate through the string with right pointer
-        while (right < s.size()) {
-
-            // Increment the frequency of current character
-            freq[s[right] - 'A']++;
-
-            // Update maxCount with the max frequency seen so far
-            maxCount = max(maxCount, freq[s[right] - 'A']);
-
-            // If the current window needs more than k replacements, move left
-            while ((right - left + 1) - maxCount > k) {
-                freq[s[left] - 'A']--;
-                left++;
-            }
-
-            // Update the maximum window length
-            maxLength = max(maxLength, right - left + 1);
-            
-            // Move right pointer forward
-            right++;
+       int low=0,high=0;unordered_map<char,int>mp;int maxi=INT_MIN;
+       while(high<s.length()){
+        mp[s[high]]++;
+        int l=high-low+1;
+        int maxFreq = 0;
+        for (auto &p : mp) {
+     maxFreq = max(maxFreq, p.second);
         }
-
-        // Return the maximum valid window length
-        return maxLength;
         
+        int v=l-maxFreq;
+        while(v>k){
+            mp[s[low]]--;
+            if(mp[s[low]]==0)
+            mp.erase(s[low]);
+            low++;
+            
+        
+        l=high-low+1;
+        for (auto &p : mp) {
+     maxFreq = max(maxFreq, p.second);
+        }
+        v=l-maxFreq;}
+        
+        
+        if(v<=k){
+        int len=high-low+1;
+        maxi=max(maxi,len);
+        }
+         high++;
+       }
+       return maxi;
     }
 };
