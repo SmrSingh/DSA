@@ -1,4 +1,11 @@
 # Write your MySQL query statement below
-SELECT STOCK_NAME,(SUM(CASE WHEN OPERATION='SELL' THEN PRICE ELSE 0 END)-SUM(CASE WHEN OPERATION='BUY' THEN PRICE ELSE 0 END)) AS CAPITAL_GAIN_LOSS
-FROM STOCKS
-GROUP BY STOCK_NAME
+SELECT
+    stock_name,
+    SUM(
+        CASE
+            WHEN operation = 'Buy' THEN -price
+            WHEN operation = 'Sell' THEN price
+        END
+    ) AS capital_gain_loss
+FROM Stocks
+GROUP BY stock_name;
